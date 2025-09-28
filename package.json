@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build && ts-node --esm scripts/ingest.ts",
+     "ingest": "ts-node --esm scripts/ingest.ts",
+    "build": "pnpm run ingest && next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
