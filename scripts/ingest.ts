@@ -1,10 +1,11 @@
 /* scripts/ingest.ts
    - Reads blogs_clean.json (fallback to blogs.json)
    - Splits, cleans chunks, embeds with text-embedding-004
-   - Saves precomputed vectors to vector_store_precomputed.json
+   - Saves precomputed vectors to public/vector_store_precomputed.json
 */
 import "dotenv/config";
 import fs from "fs";
+import path from "path";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { Document } from "langchain/document";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
@@ -71,13 +72,17 @@ async function main() {
 
   const serializedDocs: SerializedDoc[] = docs.map((d) => ({
     pageContent: d.pageContent,
-    metadata: d.metadata as Record<string, any> | undefined,
+    metadata: d.metadata ? (d.metadata as Record<string, any>) : undefined,
   }));
 
+  // ✅ Write into public/ so Vercel ships it
+  const outPath = path.join(process.cwd(), "public", "vector_store_precomputed.json");
+
   fs.writeFileSync(
-    "vector_store_precomputed.json",
+    outPath,
     JSON.stringify({ vectors, docs: serializedDocs, model: "models/text-embedding-004" }, null, 2)
   );
+
   console.log("✅ Saved precomputed vectors to vector_store_precomputed.json");
 }
 
