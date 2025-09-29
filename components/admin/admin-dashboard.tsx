@@ -160,7 +160,7 @@ export default function AdminDashboard(): JSX.Element | null {
             <ActionCard title="Add Plant" desc="Create a new plant entry" href="/plants/new" icon="🌿" />
             {/* <ActionCard title="Import CSV" desc="Bulk import plants" href="/admin/import" icon="📥" /> */}
             {/* <ActionCard title="Vector Store" desc="(Re)build embeddings" href="/admin/rag" icon="🧠" /> */}
-            <ActionCard title="Chat Logs" desc="Inspect Q&A logs" href="/admin/logs" icon="💬" />
+            {/* <ActionCard title="Chat Logs" desc="Inspect Q&A logs" href="/admin/logs" icon="💬" /> */}
           </div>
         </section>
 

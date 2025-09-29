@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
     const filtered = results.filter((r) => !UI_REGEX.test(r.pageContent));
     const context = compressContext(question, filtered.length ? filtered : results, 2000);
 
-    console.log("📝 Context passed to Gemini:\n", context);
+    console.log("📝 Context passed to ChatBot:\n", context);
 
     // Build prompt: allow own knowledge + prioritize context
     const prompt = `You are an Ayurveda assistant.
@@ -177,13 +177,13 @@ Question:
 ${question}
 `;
 
-    console.log("⚡ Calling Gemini…");
+    console.log("⚡ Calling ChatBot");
     const model = genAI.getGenerativeModel({ model: GEN_MODEL });
 
     // Simple timeout guard without AbortController flakiness
     const llmPromise = model.generateContent(prompt);
     const timeoutPromise = new Promise((_, rej) =>
-      setTimeout(() => rej(new Error("Gemini timeout")), GEMINI_TIMEOUT_MS)
+      setTimeout(() => rej(new Error("Chatbot timeout")), GEMINI_TIMEOUT_MS)
     );
 
     const resp = (await Promise.race([llmPromise, timeoutPromise])) as any;
@@ -195,7 +195,7 @@ ${question}
 
     if (typeof answer === "string") answer = answer.trim();
 
-    console.log("✅ Gemini responded");
+    console.log("✅ ChatBot responded");
     return jsonOk({ answer });
   } catch (e: any) {
     console.error("❌ API error:", e?.message || e);
